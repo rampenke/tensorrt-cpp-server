@@ -100,16 +100,6 @@ inline std::string locateFile(
     return filepath;
 }
 
-inline void readPGMFile(const std::string& fileName, uint8_t* buffer, int32_t inH, int32_t inW)
-{
-    std::ifstream infile(fileName, std::ifstream::binary);
-    SAFE_ASSERT(infile.is_open() && "Attempting to read from a file that is not open.");
-    std::string magic, w, h, max;
-    infile >> magic >> w >> h >> max;
-    infile.seekg(1, infile.cur);
-    infile.read(reinterpret_cast<char*>(buffer), inH * inW);
-}
-
 struct InferDeleter {
     template <typename T>
     void operator()(T* obj) const{
@@ -261,23 +251,6 @@ public:
     bool processInput(const BufferManager& buffers, std::vector<uint8_t>& inputData) {
         const int inputH = mInputDims.d[2];
         const int inputW = mInputDims.d[3];
-
-        // Read a random digit file
-        /*
-        srand(unsigned(time(nullptr)));
-        std::vector<uint8_t> fileData(inputH * inputW);
-        mNumber = rand() % 10;
-        readPGMFile(locateFile(std::to_string(mNumber) + ".pgm", mParams.dataDirs), fileData.data(), inputH, inputW);
-        */
-
-        // Print an ascii representation
-        /*
-        sample::gLogInfo << "Input:" << std::endl;
-        for (int i = 0; i < inputH * inputW; i++) {
-            sample::gLogInfo << (" .:-=+*#%@"[fileData[i] / 26]) << (((i + 1) % inputW) ? "" : "\n");
-        }
-        sample::gLogInfo << std::endl;
-        */
 
         std::cout << "Input:" << std::endl;
         for (int i = 0; i < inputH * inputW; i++) {
